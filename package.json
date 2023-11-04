@@ -1,0 +1,17 @@
+{
+  "name": "@unityhub/workflows",
+  "version": "1.0.0",
+  "description": "Unity Hub Workflows",
+  "scripts": {
+    "start": "dotenv -- node scripts/send-database-backup.js"
+  },
+  "author": "ArtemAstakhov",
+  "devDependencies": {
+    "dotenv-cli": "7.3.0"
+  },
+  "dependencies": {
+    "jszip": "3.10.1",
+    "luxon": "3.4.3",
+    "node-telegram-bot-api": "0.64.0"
+  }
+}

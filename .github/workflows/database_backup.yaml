@@ -1,0 +1,40 @@
+name: Back Up Database
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Setup PG
+        run: |
+          sudo apt-get update
+          sudo apt-get install postgresql-client
+
+      - name: Backup
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          pg_dump -h ${{ secrets.DB_HOST }} -p ${{ secrets.DB_PORT }} -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} --no-owner > backup.sql
+          echo "Backup completed"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          DATABASE_BACKUP_CHAT_ID: ${{ secrets.DATABASE_BACKUP_CHAT_ID }}
+        run: npm run start
