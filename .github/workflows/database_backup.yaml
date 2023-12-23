@@ -21,7 +21,7 @@ jobs:
       - name: Setup PG
         run: |
           sudo apt-get update
-          sudo apt-get install postgresql-client
+          sudo apt install postgresql-client-15 -y
 
       - name: Backup
         env:
